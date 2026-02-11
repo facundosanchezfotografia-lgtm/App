@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SuperCalc | Calculadora Inteligente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar card">
+        <div>
+          <p class="eyebrow">Supermercado inteligente</p>
+          <h1>SuperCalc</h1>
+        </div>
+        <div class="topbar-actions">
+          <button id="themeToggle" class="btn ghost" type="button" aria-label="Alternar tema">
+            🌙 Modo oscuro
+          </button>
+        </div>
+      </header>
+
+      <nav class="tabs card" aria-label="Navegación principal">
+        <button class="tab-btn active" data-tab="calculator" type="button">Calculadora</button>
+        <button class="tab-btn" data-tab="history" type="button">Historial</button>
+      </nav>
+
+      <main>
+        <section id="calculator" class="tab-panel active" aria-labelledby="calculadora">
+          <div class="grid-layout">
+            <article class="card stack">
+              <h2>Agregar producto</h2>
+              <form id="productForm" class="stack" autocomplete="off">
+                <label class="field">
+                  <span>Nombre del producto</span>
+                  <input id="productName" type="text" required placeholder="Ej: Manzanas" />
+                </label>
+
+                <div class="field-row">
+                  <label class="field">
+                    <span>Cantidad</span>
+                    <input id="productQuantity" type="number" min="0.01" step="0.01" value="1" required />
+                  </label>
+                  <label class="field">
+                    <span>Precio unitario</span>
+                    <input id="productPrice" type="number" min="0" step="0.01" value="0" required />
+                  </label>
+                </div>
+
+                <p class="hint" id="productSubtotal">Subtotal: $0.00</p>
+                <button id="addBtn" class="btn primary" type="submit">Agregar al carrito</button>
+              </form>
+            </article>
+
+            <article class="card stack">
+              <h2>Configuración inteligente</h2>
+              <div class="stack compact">
+                <label class="field">
+                  <span>Impuestos (%)</span>
+                  <input id="taxRate" type="number" min="0" max="100" step="0.1" value="0" />
+                </label>
+
+                <label class="field">
+                  <span>Descuento (%)</span>
+                  <input id="discountPercent" type="number" min="0" max="100" step="0.1" value="0" />
+                </label>
+
+                <label class="field">
+                  <span>Descuento fijo ($)</span>
+                  <input id="discountFixed" type="number" min="0" step="0.01" value="0" />
+                </label>
+
+                <label class="field">
+                  <span>Presupuesto máximo ($)</span>
+                  <input id="budget" type="number" min="0" step="0.01" value="0" />
+                </label>
+              </div>
+              <div>
+                <div class="budget-label">
+                  <span>Uso de presupuesto</span>
+                  <strong id="budgetText">Sin presupuesto definido</strong>
+                </div>
+                <div class="budget-bar" role="progressbar" aria-label="Uso del presupuesto" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                  <div id="budgetFill" class="budget-fill"></div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <article class="card stack">
+            <div class="section-head">
+              <h2>Carrito actual</h2>
+              <button id="savePurchase" class="btn primary" type="button" disabled>Guardar compra</button>
+            </div>
+            <div id="cartList" class="product-list"></div>
+
+            <div class="totals">
+              <div><span>Subtotal</span><strong id="subtotalValue">$0.00</strong></div>
+              <div><span>Impuestos</span><strong id="taxValue">$0.00</strong></div>
+              <div><span>Descuentos</span><strong id="discountValue">-$0.00</strong></div>
+              <div class="total-line"><span>Total general</span><strong id="totalValue">$0.00</strong></div>
+            </div>
+          </article>
+        </section>
+
+        <section id="history" class="tab-panel" aria-labelledby="historial">
+          <article class="card stack">
+            <div class="section-head wrap">
+              <h2>Historial de compras</h2>
+              <label class="field inline-field">
+                <span>Buscar</span>
+                <input id="historySearch" type="search" placeholder="Buscar por producto o fecha" />
+              </label>
+            </div>
+            <div id="historyList" class="history-list"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <template id="cartItemTemplate">
+      <article class="item-card fade-in">
+        <div>
+          <h3 data-name></h3>
+          <p data-details></p>
+        </div>
+        <div class="item-actions">
+          <button class="btn tiny" data-edit type="button">Editar</button>
+          <button class="btn tiny danger" data-delete type="button">Eliminar</button>
+        </div>
+      </article>
+    </template>
+
+    <template id="historyItemTemplate">
+      <details class="history-card">
+        <summary>
+          <div>
+            <h3 data-title></h3>
+            <p data-meta></p>
+          </div>
+          <strong data-total></strong>
+        </summary>
+        <div data-products class="history-products"></div>
+        <div class="item-actions">
+          <button class="btn tiny" data-duplicate type="button">Duplicar compra</button>
+          <button class="btn tiny danger" data-delete-history type="button">Eliminar</button>
+        </div>
+      </details>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
